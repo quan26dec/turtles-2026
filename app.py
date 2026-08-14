@@ -51,23 +51,27 @@ if stock_code:
         df = pd.DataFrame(data)
         df["Date"] = pd.to_datetime(df["Date"])
         df = df.sort_values("Date")
-        df = df.dropna(subset=["AdjH", "AdjC"])
+        df = df.dropna(subset=["AdjH", "AdjL", "AdjC"])
 
         if len(df) >= 56:
             latest = df.iloc[-1]
             prior_20 = df.iloc[-21:-1]
+            prior_10 = df.iloc[-11:-1]
             prior_55 = df.iloc[-56:-1]
             
             latest_close = latest["AdjC"]
             high_20 = prior_20["AdjH"].max()
             high_55 = prior_55["AdjH"].max()
+            low_10 = prior_10["AdjL"].min()
             breakout_20 = latest_close > high_20
             breakout_55 = latest_close > high_55
-
+            exit_10 = latest_close < low_10
+            
             st.write(f"最新日：{latest['Date'].date()}")
             st.write(f"最新終値：{latest_close:,.1f}円")
             st.write(f"過去20日高値：{high_20:,.1f}円")
             st.write(f"過去55日高値：{high_55:,.1f}円")
+            st.write(f"過去10日安値：{low_10:,.1f}円")
             
             if breakout_20:
                 st.success("🐢 20日高値ブレイク！")
@@ -76,7 +80,11 @@ if stock_code:
             if breakout_55:
                 st.success("🐢🐢 55日高値ブレイク！")
             else:
-                st.info("55日高値はまだブレイクしていません。")
+                    st.info("55日高値はまだブレイクしていません。")
+            if exit_10:
+                st.error("🐢 EXIT：10日安値を割りました。")
+            else:
+                st.success("10日安値は維持しています。")
     
     else:
         st.error(f"J-Quants接続エラー：{response.status_code}")
