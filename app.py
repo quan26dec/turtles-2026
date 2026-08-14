@@ -25,3 +25,27 @@ stock_code = st.text_input(
 )
 
 st.caption("まずは1銘柄ずつ、タートルズ条件を判定します。")
+
+if stock_code:
+    url = "https://api.jquants.com/v2/equities/bars/daily"
+
+    headers = {
+        "x-api-key": JQUANTS_API_KEY
+    }
+
+    params = {
+        "code": stock_code
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        params=params,
+        timeout=30
+    )
+
+    if response.status_code == 200:
+        data = response.json().get("data", [])
+        st.success(f"J-Quants接続成功：{len(data)}件取得")
+    else:
+        st.error(f"J-Quants接続エラー：{response.status_code}")
