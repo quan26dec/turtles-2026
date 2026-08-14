@@ -47,5 +47,28 @@ if stock_code:
     if response.status_code == 200:
         data = response.json().get("data", [])
         st.success(f"J-Quants接続成功：{len(data)}件取得")
+
+        df = pd.DataFrame(data)
+        df["Date"] = pd.to_datetime(df["Date"])
+        df = df.sort_values("Date")
+        df = df.dropna(subset=["AdjH", "AdjC"])
+
+        if len(df) >= 21:
+            latest = df.iloc[-1]
+            prior_20 = df.iloc[-21:-1]
+
+            latest_close = latest["AdjC"]
+            high_20 = prior_20["AdjH"].max()
+            breakout_20 = latest_close > high_20
+
+            st.write(f"最新日：{latest['Date'].date()}")
+            st.write(f"最新終値：{latest_close:,.1f}円")
+            st.write(f"過去20日高値：{high_20:,.1f}円")
+
+            if breakout_20:
+                st.success("🐢 20日高値ブレイク！")
+            else:
+                st.info("20日高値はまだブレイクしていません。")    
+    
     else:
         st.error(f"J-Quants接続エラー：{response.status_code}")
