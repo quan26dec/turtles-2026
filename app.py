@@ -1,4 +1,6 @@
 import streamlit as st
+import requests
+import pandas as pd
 
 st.set_page_config(
     page_title="Turtles 2026",
