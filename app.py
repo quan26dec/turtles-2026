@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+JQUANTS_API_KEY = st.secrets["JQUANTS_API_KEY"]
+
 st.set_page_config(
     page_title="Turtles 2026",
     page_icon="🐢",
