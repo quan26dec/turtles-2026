@@ -172,6 +172,26 @@ if screen_codes:
 
             if len(df_screen) >= 56:
                 st.write(f"🐢 {code}：判定用データOK")
+
+                latest_screen = df_screen.iloc[-1]
+                prior_20_screen = df_screen.iloc[-21:-1]
+                prior_10_screen = df_screen.iloc[-11:-1]
+                prior_55_screen = df_screen.iloc[-56:-1]
+
+                latest_close_screen = latest_screen["AdjC"]
+                high_20_screen = prior_20_screen["AdjH"].max()
+                high_55_screen = prior_55_screen["AdjH"].max()
+                low_10_screen = prior_10_screen["AdjL"].min()
+                volume_ratio_screen = latest_screen["AdjVo"] / prior_20_screen["AdjVo"].mean()
+
+                breakout_20_screen = latest_close_screen > high_20_screen
+                breakout_55_screen = latest_close_screen > high_55_screen
+                exit_10_screen = latest_close_screen < low_10_screen
+
+                st.write(f"終値：{latest_close_screen:,.1f}円")
+                st.write(f"20日高値：{high_20_screen:,.1f}円 / 55日高値：{high_55_screen:,.1f}円")
+                st.write(f"出来高倍率：{volume_ratio_screen:.2f}倍")
+            
             else:
                 st.warning(f"🐢 {code}：判定用データ不足")
         
