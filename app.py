@@ -140,7 +140,9 @@ if screen_codes:
     ]
 
     st.write("入力された銘柄コード：", codes)
-
+    
+    turtle_candidates = []
+    
     for code in codes:
         st.write("🐢 判定対象：", code)
 
@@ -194,9 +196,11 @@ if screen_codes:
 
                 if breakout_55_screen and volume_ratio_screen >= 1.5:
                     st.success(f"🐢🐢 {code}：タートルズ強い候補")
-
+                    turtle_candidates.append(code)
+                
                 elif breakout_20_screen and volume_ratio_screen >= 1.5:
                     st.success(f"🐢 {code}：タートルズ候補")
+                    turtle_candidates.append(code)
 
                 else:
                     st.info(f"👀 {code}：監視")
@@ -205,4 +209,12 @@ if screen_codes:
                 st.warning(f"🐢 {code}：判定用データ不足")
         
         else:
-            st.error(f"🐢 {code}：取得エラー {response.status_code}")        
+            st.error(f"🐢 {code}：取得エラー {response.status_code}")  
+                    
+            st.divider()
+            st.subheader("🐢 スクリーニング結果")
+
+            if turtle_candidates:
+                st.success(f"🐢 候補銘柄：{', '.join(turtle_candidates)}")
+            else:
+                st.info("👀 今回はタートルズ候補なし")
