@@ -143,3 +143,24 @@ if screen_codes:
 
     for code in codes:
         st.write("🐢 判定対象：", code)
+
+        url = "https://api.jquants.com/v2/equities/bars/daily"
+
+        headers = {
+            "x-api-key": JQUANTS_API_KEY
+        }
+
+        params = {
+            "code": code
+        }
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params,
+            timeout=30
+        )
+        if response.status_code == 200:
+            data = response.json().get("data", [])
+            st.success(f"🐢 {code}：J-Quants取得成功 {len(data)}件")
+        else:
+            st.error(f"🐢 {code}：取得エラー {response.status_code}")        
