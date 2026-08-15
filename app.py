@@ -211,10 +211,10 @@ if screen_codes:
         else:
             st.error(f"🐢 {code}：取得エラー {response.status_code}")  
                     
-            st.divider()
-            st.subheader("🐢 スクリーニング結果")
+        st.divider()
+        st.subheader("🐢 スクリーニング結果")
 
-            if turtle_candidates:
-                st.success(f"🐢 候補銘柄：{', '.join(turtle_candidates)}")
-            else:
-                st.info("👀 今回はタートルズ候補なし")
+        if turtle_candidates:
+            st.success(f"🐢 候補銘柄：{', '.join(turtle_candidates)}")
+        else:
+            st.info("👀 今回はタートルズ候補なし")
