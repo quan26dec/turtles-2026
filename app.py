@@ -162,5 +162,18 @@ if screen_codes:
         if response.status_code == 200:
             data = response.json().get("data", [])
             st.success(f"🐢 {code}：J-Quants取得成功 {len(data)}件")
+
+            df_screen = pd.DataFrame(data)
+            df_screen["Date"] = pd.to_datetime(df_screen["Date"])
+            df_screen = df_screen.sort_values("Date")
+            df_screen = df_screen.dropna(
+                subset=["AdjH", "AdjL", "AdjC", "AdjVo"]
+            )
+
+            if len(df_screen) >= 56:
+                st.write(f"🐢 {code}：判定用データOK")
+            else:
+                st.warning(f"🐢 {code}：判定用データ不足")
+        
         else:
             st.error(f"🐢 {code}：取得エラー {response.status_code}")        
