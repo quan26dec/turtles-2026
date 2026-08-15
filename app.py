@@ -119,4 +119,10 @@ if stock_code:
                 st.info("👀 監視：現在は新規エントリー条件なし")
     
     else:
-        st.error(f"J-Quants接続エラー：{response.status_code}")
+st.error(f"J-Quants接続エラー：{response.status_code}")
+    
+st.divider()
+        
+st.subheader("🐢 タートルズ・スクリーナー")
+        
+st.caption("複数銘柄からタートルズ条件に合う銘柄を探します。")
