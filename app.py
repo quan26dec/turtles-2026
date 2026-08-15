@@ -101,6 +101,22 @@ if stock_code:
                 st.error("🐢 EXIT：10日安値を割りました。")
             else:
                 st.success("10日安値は維持しています。")
+
+            st.divider()
+            st.subheader("🐢 総合判定")
+    
+            if exit_10:
+                st.error("🔴 EXIT候補：10日安値を割っています")
+            elif breakout_55 and volume_ratio >= 1.5:
+                st.success("🐢🐢 強い買い候補：55日高値突破 ＋ 出来高増加")
+            elif breakout_20 and volume_ratio >= 1.5:
+                st.success("🐢 買い候補：20日高値突破 ＋ 出来高増加")
+            elif breakout_55:
+                st.warning("🐢 55日高値突破：出来高を確認")
+            elif breakout_20:
+                st.warning("🐢 20日高値突破：出来高を確認")
+            else:
+                st.info("👀 監視：現在は新規エントリー条件なし")
     
     else:
         st.error(f"J-Quants接続エラー：{response.status_code}")
