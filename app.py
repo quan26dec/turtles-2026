@@ -140,3 +140,6 @@ if screen_codes:
     ]
 
     st.write("入力された銘柄コード：", codes)
+
+    for code in codes:
+        st.write("🐢 判定対象：", code)
