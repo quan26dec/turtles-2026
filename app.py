@@ -126,3 +126,8 @@ st.divider()
 st.subheader("🐢 タートルズ・スクリーナー")
         
 st.caption("複数銘柄からタートルズ条件に合う銘柄を探します。")
+
+screen_codes = st.text_area(
+    "スクリーニングする銘柄コードを入力してください",
+    placeholder="例：8591, 4208, 6525"
+)
