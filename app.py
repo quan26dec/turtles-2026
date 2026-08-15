@@ -191,6 +191,15 @@ if screen_codes:
                 st.write(f"終値：{latest_close_screen:,.1f}円")
                 st.write(f"20日高値：{high_20_screen:,.1f}円 / 55日高値：{high_55_screen:,.1f}円")
                 st.write(f"出来高倍率：{volume_ratio_screen:.2f}倍")
+
+                if breakout_55_screen and volume_ratio_screen >= 1.5:
+                    st.success(f"🐢🐢 {code}：タートルズ強い候補")
+
+                elif breakout_20_screen and volume_ratio_screen >= 1.5:
+                    st.success(f"🐢 {code}：タートルズ候補")
+
+                else:
+                    st.info(f"👀 {code}：監視")
             
             else:
                 st.warning(f"🐢 {code}：判定用データ不足")
