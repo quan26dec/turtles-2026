@@ -51,7 +51,7 @@ if stock_code:
         df = pd.DataFrame(data)
         df["Date"] = pd.to_datetime(df["Date"])
         df = df.sort_values("Date")
-        df = df.dropna(subset=["AdjH", "AdjL", "AdjC"])
+        df = df.dropna(subset=["AdjH", "AdjL", "AdjC", "AdjVo"])
 
         if len(df) >= 56:
             latest = df.iloc[-1]
@@ -60,6 +60,11 @@ if stock_code:
             prior_55 = df.iloc[-56:-1]
             
             latest_close = latest["AdjC"]
+
+            latest_volume = latest["AdjVo"]
+            avg_volume_20 = prior_20["AdjVo"].mean()
+            volume_ratio = latest_volume / avg_volume_20
+            
             high_20 = prior_20["AdjH"].max()
             high_55 = prior_55["AdjH"].max()
             low_10 = prior_10["AdjL"].min()
@@ -72,6 +77,17 @@ if stock_code:
             st.write(f"過去20日高値：{high_20:,.1f}円")
             st.write(f"過去55日高値：{high_55:,.1f}円")
             st.write(f"過去10日安値：{low_10:,.1f}円")
+
+            st.write(f"最新出来高：{latest_volume:,.0f}株")
+            st.write(f"20日平均出来高：{avg_volume_20:,.0f}株")
+            st.write(f"出来高倍率：{volume_ratio:.2f}倍")
+
+            if volume_ratio >= 2.0:
+                st.success("🔥 出来高急増：20日平均の2倍以上")
+            elif volume_ratio >= 1.5:
+                st.warning("📈 出来高増加：20日平均の1.5倍以上")
+            else:
+                st.info("出来高は通常範囲です。")
             
             if breakout_20:
                 st.success("🐢 20日高値ブレイク！")
