@@ -131,3 +131,12 @@ screen_codes = st.text_area(
     "スクリーニングする銘柄コードを入力してください",
     placeholder="例：8591, 4208, 6525"
 )
+
+if screen_codes:
+    codes = [
+        code.strip()
+        for code in screen_codes.replace("\n", ",").split(",")
+        if code.strip()
+    ]
+
+    st.write("入力された銘柄コード：", codes)
