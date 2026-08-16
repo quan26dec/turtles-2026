@@ -285,6 +285,7 @@ if master_response.status_code == 200:
     
     test_codes = auto_codes[:100]
     auto_candidates = []
+    auto_candidates_20 = []
     
     for test_code in test_codes:
         test_response = requests.get(
@@ -338,7 +339,9 @@ if master_response.status_code == 200:
             breakout_20_test = latest_test["AdjC"] > high_20_test
 
             st.write(f"🐢 {test_code}：20日ブレイク {breakout_20_test}")
-
+            if breakout_20_test and volume_ratio_test >= 1.5:
+                auto_candidates_20.append(test_code)
+            
             breakout_55_test = latest_test["AdjC"] > high_55_test
 
             st.write(f"🐢 {test_code}：55日ブレイク {breakout_55_test}")
@@ -349,3 +352,5 @@ if master_response.status_code == 200:
 
             st.write("🐢 自動巡回候補数：", len(auto_candidates))
             st.write("🐢 自動巡回候補：", auto_candidates)
+            st.write("🐢 20日候補数：", len(auto_candidates_20))
+            st.write("🐢 20日候補：", auto_candidates_20)
