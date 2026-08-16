@@ -120,7 +120,9 @@ if stock_code:
     
     else:
         st.error(f"J-Quants接続エラー：{response.status_code}")
-    
+
+print("DEBUG_SINGLE_SECTION_END", flush=True)
+
 st.divider()
         
 st.subheader("🐢 タートルズ・スクリーナー")
