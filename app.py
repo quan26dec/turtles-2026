@@ -335,3 +335,15 @@ if master_response.status_code == 200:
             st.write("🐢 自動巡回候補：", auto_candidates)
             st.write("🐢 20日候補数：", len(auto_candidates_20))
             st.write("🐢 20日候補：", auto_candidates_20)
+
+st.divider()
+st.subheader("⚡ Bulk高速化テスト")
+
+bulk_list_url = "https://api.jquants.com/v2/bulk/list"
+
+bulk_response = requests.get(
+    bulk_list_url,
+    headers={"x-api-key": JQUANTS_API_KEY}
+)
+
+st.write("⚡ Bulk APIテスト：", bulk_response.status_code)
