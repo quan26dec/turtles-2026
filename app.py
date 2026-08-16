@@ -140,6 +140,12 @@ if screen_codes:
     ]
 
     st.write("入力された銘柄コード：", codes)
+
+    if len(codes) > 20:
+        st.warning("⚠️ 現在は最大20銘柄までです。最初の20銘柄を判定します。")
+        codes = codes[:20]
+
+    st.write(f"🐢 スクリーニング対象：{len(codes)}銘柄")
     
     turtle_candidates = []
     
