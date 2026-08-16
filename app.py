@@ -361,3 +361,13 @@ st.write("⚡ Bulk最終ファイル：", bulk_files[-1])
 latest_bulk_key = bulk_files[-1]["Key"]
 
 st.write("⚡ 最新Bulkキー：", latest_bulk_key)
+
+bulk_get_url = "https://api.jquants.com/v2/bulk/get"
+
+bulk_get_response = requests.get(
+    bulk_get_url,
+    headers={"x-api-key": JQUANTS_API_KEY},
+    params={"key": latest_bulk_key}
+)
+
+st.write("⚡ Bulk取得テスト：", bulk_get_response.status_code)
