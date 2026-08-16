@@ -280,3 +280,18 @@ if master_response.status_code == 200:
     
     st.write("🐢 5桁コードテスト :", test_code)
     st.write("🐢 日足APIテスト :", test_response.status_code)
+
+    st.write("🐢 5銘柄自動巡回テスト")
+    
+    test_codes = auto_codes[:5]
+    
+    for test_code in test_codes:
+        test_response = requests.get(
+            test_url,
+            headers={"x-api-key": JQUANTS_API_KEY},
+            params={"code": test_code}
+        )
+    
+        st.write(
+            f"🐢 {test_code}：日足API {test_response.status_code}"
+        )
