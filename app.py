@@ -352,3 +352,6 @@ st.write("⚡ Bulk APIテスト：", bulk_response.status_code)
 bulk_data = bulk_response.json()
 
 st.write("⚡ Bulkデータ項目：", bulk_data.keys())
+
+bulk_files = bulk_data.get("data", [])
+st.write("⚡ Bulkファイル件数：", len(bulk_files))
