@@ -283,7 +283,7 @@ if master_response.status_code == 200:
 
     st.write("🐢 5銘柄自動巡回テスト")
     
-    test_codes = auto_codes[:50]
+    test_codes = auto_codes[:100]
     auto_candidates = []
     
     for test_code in test_codes:
