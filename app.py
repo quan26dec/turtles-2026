@@ -396,3 +396,26 @@ st.write("⚡ Bulk末尾5ファイル：", bulk_files[-5:])
 bulk_55_files = bulk_files[-56:]
 
 st.write("⚡ Bulk55用ファイル数：", len(bulk_55_files))
+
+bulk_dfs = []
+
+for bulk_item in bulk_55_files:
+    item_key = bulk_item["Key"]
+    item_get_response = requests.get(
+        bulk_get_url,
+        headers={"x-api-key": JQUANTS_API_KEY},
+        params={"key": item_key}
+    )
+    item_get_data = item_get_response.json()
+
+    item_download_url = item_get_data["url"]
+
+    item_file_response = requests.get(item_download_url)
+
+    item_df = pd.read_csv(io.BytesIO(item_file_response.content), compression="gzip")
+
+    bulk_dfs.append(item_df)
+
+bulk_all_df = pd.concat(bulk_dfs, ignore_index=True)
+
+st.write("⚡ Bulk結合後行数：", len(bulk_all_df))
