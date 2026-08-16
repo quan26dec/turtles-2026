@@ -257,3 +257,8 @@ master_url = "https://api.jquants.com/v2/equities/master"
 
 master_response = requests.get(master_url, headers={"x-api-key": JQUANTS_API_KEY})
 st.write("📡 銘柄一覧API:", master_response.status_code)
+
+if master_response.status_code == 200:
+    master_data = master_response.json().get("data", [])
+    master_df = pd.DataFrame(master_data)
+    st.success(f"📡 自動取得した銘柄数：{len(master_df)}件")
