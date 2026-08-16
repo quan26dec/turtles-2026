@@ -284,6 +284,7 @@ if master_response.status_code == 200:
     st.write("🐢 5銘柄自動巡回テスト")
     
     test_codes = auto_codes[:5]
+    auto_candidates = []
     
     for test_code in test_codes:
         test_response = requests.get(
@@ -335,3 +336,7 @@ if master_response.status_code == 200:
 
             if breakout_55_test and volume_ratio_test >= 1.5:
                 st.success(f"🐢🐢 {test_code}：自動巡回・強い候補")
+                auto_candidates.append(test_code)
+
+            st.write("🐢 自動巡回候補数：", len(auto_candidates))
+            st.write("🐢 自動巡回候補：", auto_candidates)
