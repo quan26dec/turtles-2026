@@ -300,6 +300,15 @@ if master_response.status_code == 200:
         if test_response.status_code == 200:
             test_data = test_response.json().get("data", [])
             test_df = pd.DataFrame(test_data)
+            test_df["AdjC"] = pd.to_numeric(test_df["AdjC"], errors="coerce")
+            test_df["AdjH"] = pd.to_numeric(test_df["AdjH"], errors="coerce")
+            test_df["AdjVo"] = pd.to_numeric(test_df["AdjVo"], errors="coerce")
+            test_df = test_df.dropna(subset=["AdjC", "AdjH", "AdjVo"])
+
+            if len(test_df) < 56:
+                st.warning(f"⚠️ {test_code}：有効な日足データが56件未満のためスキップ")
+                continue
+                
             st.write(f"🐢 {test_code}：取得日足 {len(test_df)}件")
             st.write(f"🐢 {test_code}：列名", test_df.columns.tolist())
 
