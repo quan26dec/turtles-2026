@@ -396,6 +396,7 @@ st.write("⚡ Bulk末尾5ファイル：", bulk_files[-5:])
 live_bulk_files = [item for item in bulk_files if "/live/" in item.get("Key", "")]
 bulk_55_files = live_bulk_files[-10:]
 st.write("🔍 liveファイル数:", len(live_bulk_files))
+print("DEBUG_A live files =", len(live_bulk_files), "selected =", len(bulk_55_files), flush=True)
 
 st.write("⚡ Bulk55用ファイル数：", len(bulk_55_files))
 
