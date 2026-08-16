@@ -393,7 +393,8 @@ st.write("⚡ Bulk先頭データ：", bulk_df.iloc[0].to_dict())
 
 st.write("⚡ Bulk末尾5ファイル：", bulk_files[-5:])
 
-bulk_55_files = bulk_files[-56:]
+live_bulk_files = [item for item in bulk_files if "/live/" in item.get("Key", "")]
+bulk_55_files = live_bulk_files[-56:]
 
 st.write("⚡ Bulk55用ファイル数：", len(bulk_55_files))
 
