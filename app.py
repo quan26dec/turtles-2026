@@ -380,3 +380,9 @@ bulk_download_url = bulk_get_data["url"]
 bulk_file_response = requests.get(bulk_download_url)
 
 st.write("⚡ Bulkファイル取得：", bulk_file_response.status_code)
+
+import io
+
+bulk_df = pd.read_csv(io.BytesIO(bulk_file_response.content), compression="gzip")
+
+st.write("⚡ Bulk読込行数：", len(bulk_df))
