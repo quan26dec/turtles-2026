@@ -282,6 +282,7 @@ if master_response.status_code == 200:
     st.write("🐢 日足APIテスト :", test_response.status_code)
 
     st.write("🐢 5銘柄自動巡回テスト")
+    print("DEBUG_TURTLE_START", flush=True)
     
     test_codes = auto_codes[:5]
     auto_candidates = []
