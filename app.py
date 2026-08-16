@@ -268,3 +268,15 @@ if master_response.status_code == 200:
 
     auto_codes_4digit = [code[:4] for code in auto_codes]
     st.write("🐢 4桁変換（先頭10件）:", auto_codes_4digit[:10])
+
+    test_code = auto_codes[0]
+    
+    test_url = "https://api.jquants.com/v2/equities/bars/daily"
+    test_response = requests.get(
+        test_url,
+        headers={"x-api-key": JQUANTS_API_KEY},
+        params={"code": test_code}
+    )
+    
+    st.write("🐢 5桁コードテスト :", test_code)
+    st.write("🐢 日足APIテスト :", test_response.status_code)
