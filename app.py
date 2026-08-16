@@ -249,3 +249,11 @@ if screen_codes:
         st.dataframe(result_df, use_container_width=True)
     else:
         st.info("👀 今回はタートルズ候補なし")
+
+st.divider()
+st.subheader("📡 自動銘柄一覧")
+
+master_url = "https://api.jquants.com/v2/equities/master"
+
+master_response = requests.get(master_url, headers={"x-api-key": JQUANTS_API_KEY})
+st.write("📡 銘柄一覧API:", master_response.status_code)
