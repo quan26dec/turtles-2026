@@ -196,11 +196,25 @@ if screen_codes:
 
                 if breakout_55_screen and volume_ratio_screen >= 1.5:
                     st.success(f"🐢🐢 {code}：タートルズ強い候補")
-                    turtle_candidates.append(code)
+                    turtle_candidates.append({
+                        "code": code,
+                        "signal": "🐢🐢 強い候補",
+                        "close": latest_close_screen,
+                        "high20": high_20_screen,
+                        "high55": high_55_screen,
+                        "volume_ratio": volume_ratio_screen,
+                    })
                 
                 elif breakout_20_screen and volume_ratio_screen >= 1.5:
                     st.success(f"🐢 {code}：タートルズ候補")
-                    turtle_candidates.append(code)
+                    turtle_candidates.append({
+                        "code": code,
+                        "signal": "🐢 候補",
+                        "close": latest_close_screen,
+                        "high20": high_20_screen,
+                        "high55": high_55_screen,
+                        "volume_ratio": volume_ratio_screen,
+                    })
 
                 else:
                     st.info(f"👀 {code}：監視")
@@ -215,6 +229,17 @@ if screen_codes:
         st.subheader("🐢 スクリーニング結果")
 
         if turtle_candidates:
-            st.success(f"🐢 候補銘柄：{', '.join(turtle_candidates)}")
+            result_df = pd.DataFrame(turtle_candidates)
+        
+            result_df = result_df.rename(columns={
+                "code": "銘柄コード",
+                "signal": "判定",
+                "close": "終値",
+                "high20": "20日高値",
+                "high55": "55日高値",
+                "volume_ratio": "出来高倍率",
+            })
+        
+            st.dataframe(result_df, use_container_width=True)
         else:
             st.info("👀 今回はタートルズ候補なし")
