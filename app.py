@@ -265,3 +265,6 @@ if master_response.status_code == 200:
 
     auto_codes = master_df["Code"].astype(str).tolist()
     st.write("🐢 自動巡回用コード（先頭10件）:", auto_codes[:10])
+
+    auto_codes_4digit = [code[:4] for code in auto_codes]
+    st.write("🐢 4桁変換（先頭10件）:", auto_codes_4digit[:10])
