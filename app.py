@@ -300,3 +300,4 @@ if master_response.status_code == 200:
             test_data = test_response.json().get("data", [])
             test_df = pd.DataFrame(test_data)
             st.write(f"🐢 {test_code}：取得日足 {len(test_df)}件")
+            st.write(f"🐢 {test_code}：列名", test_df.columns.tolist())
