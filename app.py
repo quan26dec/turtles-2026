@@ -312,3 +312,8 @@ if master_response.status_code == 200:
             past_20_test = test_df.iloc[:-1].tail(20)
             high_20_test = past_20_test["AdjH"].max()
             st.write(f"🐢 {test_code}：20日高値 {high_20_test:,.1f}円")
+
+            past_55_test = test_df.iloc[:-1].tail(55)
+            high_55_test = past_55_test["AdjH"].max()
+
+            st.write(f"🐢 {test_code}：55日高値 {high_55_test:,.1f}円")
