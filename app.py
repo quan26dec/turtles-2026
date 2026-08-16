@@ -283,7 +283,7 @@ if master_response.status_code == 200:
 
     st.write("🐢 5銘柄自動巡回テスト")
     
-    test_codes = auto_codes[:500]
+    test_codes = auto_codes[:5]
     auto_candidates = []
     auto_candidates_20 = []
     
@@ -343,7 +343,8 @@ bulk_list_url = "https://api.jquants.com/v2/bulk/list"
 
 bulk_response = requests.get(
     bulk_list_url,
-    headers={"x-api-key": JQUANTS_API_KEY}
+    headers={"x-api-key": JQUANTS_API_KEY},
+    params={"endpoint": "/equities/bars/daily"}
 )
 
 st.write("⚡ Bulk APIテスト：", bulk_response.status_code)
