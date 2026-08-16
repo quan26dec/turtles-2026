@@ -328,3 +328,7 @@ if master_response.status_code == 200:
             breakout_20_test = latest_test["AdjC"] > high_20_test
 
             st.write(f"🐢 {test_code}：20日ブレイク {breakout_20_test}")
+
+            breakout_55_test = latest_test["AdjC"] > high_55_test
+
+            st.write(f"🐢 {test_code}：55日ブレイク {breakout_55_test}")
