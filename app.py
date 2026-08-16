@@ -301,3 +301,10 @@ if master_response.status_code == 200:
             test_df = pd.DataFrame(test_data)
             st.write(f"🐢 {test_code}：取得日足 {len(test_df)}件")
             st.write(f"🐢 {test_code}：列名", test_df.columns.tolist())
+
+            test_df["Date"] = pd.to_datetime(test_df["Date"])
+            test_df = test_df.sort_values("Date")
+            latest_test = test_df.iloc[-1]
+
+            st.write(f"🐢 {test_code}：最新日 {latest_test['Date'].date()}")
+            st.write(f"🐢 {test_code}：最新終値 {latest_test['AdjC']:,.1f}円")
