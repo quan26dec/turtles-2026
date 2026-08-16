@@ -412,7 +412,12 @@ for bulk_item in bulk_55_files:
 
     item_file_response = requests.get(item_download_url)
 
-    item_df = pd.read_csv(io.BytesIO(item_file_response.content), compression="gzip")
+    item_df = pd.read_csv(
+    io.BytesIO(item_file_response.content),
+    compression="gzip",
+    usecols=["Date", "Code", "H", "C", "Vo"],
+    dtype={"Code": str}
+)
 
     bulk_dfs.append(item_df)
 
