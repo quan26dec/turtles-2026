@@ -388,3 +388,5 @@ bulk_df = pd.read_csv(io.BytesIO(bulk_file_response.content), compression="gzip"
 st.write("⚡ Bulk読込行数：", len(bulk_df))
 
 st.write("⚡ Bulk列名：", bulk_df.columns.tolist())
+
+st.write("⚡ Bulk先頭データ：", bulk_df.iloc[0].to_dict())
