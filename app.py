@@ -225,21 +225,21 @@ if screen_codes:
         else:
             st.error(f"🐢 {code}：取得エラー {response.status_code}")  
                     
-        st.divider()
-        st.subheader("🐢 スクリーニング結果")
+    st.divider()
+    st.subheader("🐢 スクリーニング結果")
 
-        if turtle_candidates:
-            result_df = pd.DataFrame(turtle_candidates)
-        
-            result_df = result_df.rename(columns={
-                "code": "銘柄コード",
-                "signal": "判定",
-                "close": "終値",
-                "high20": "20日高値",
-                "high55": "55日高値",
-                "volume_ratio": "出来高倍率",
-            })
-        
-            st.dataframe(result_df, use_container_width=True)
-        else:
-            st.info("👀 今回はタートルズ候補なし")
+    if turtle_candidates:
+        result_df = pd.DataFrame(turtle_candidates)
+    
+        result_df = result_df.rename(columns={
+            "code": "銘柄コード",
+            "signal": "判定",
+            "close": "終値",
+            "high20": "20日高値",
+            "high55": "55日高値",
+            "volume_ratio": "出来高倍率",
+        })
+    
+        st.dataframe(result_df, use_container_width=True)
+    else:
+        st.info("👀 今回はタートルズ候補なし")
