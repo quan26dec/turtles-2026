@@ -355,3 +355,5 @@ st.write("⚡ Bulkデータ項目：", bulk_data.keys())
 
 bulk_files = bulk_data.get("data", [])
 st.write("⚡ Bulkファイル件数：", len(bulk_files))
+
+st.write("⚡ Bulk最終ファイル：", bulk_files[-1])
