@@ -419,3 +419,39 @@ for bulk_item in bulk_55_files:
 bulk_all_df = pd.concat(bulk_dfs, ignore_index=True)
 
 st.write("⚡ Bulk結合後行数：", len(bulk_all_df))
+
+bulk_all_df["Date"] = pd.to_datetime(bulk_all_df["Date"])
+
+bulk_all_df = bulk_all_df.sort_values(["Code", "Date"])
+
+bulk_all_df["C"] = pd.to_numeric(bulk_all_df["C"], errors="coerce")
+
+bulk_all_df["H"] = pd.to_numeric(bulk_all_df["H"], errors="coerce")
+
+bulk_all_df["Vo"] = pd.to_numeric(bulk_all_df["Vo"], errors="coerce")
+
+bulk_all_df = bulk_all_df.dropna(subset=["Code", "Date", "C", "H", "Vo"])
+
+bulk_all_df["High20"] = bulk_all_df.groupby("Code")["H"].transform(lambda x: x.shift(1).rolling(20).max())
+
+bulk_all_df["High55"] = bulk_all_df.groupby("Code")["H"].transform(lambda x: x.shift(1).rolling(55).max())
+
+bulk_all_df["Vol20"] = bulk_all_df.groupby("Code")["Vo"].transform(lambda x: x.shift(1).rolling(20).mean())
+
+bulk_all_df["VolRatio"] = bulk_all_df["Vo"] / bulk_all_df["Vol20"]
+
+bulk_all_df["Break20"] = bulk_all_df["C"] > bulk_all_df["High20"]
+
+bulk_all_df["Break55"] = bulk_all_df["C"] > bulk_all_df["High55"]
+
+latest_date = bulk_all_df["Date"].max()
+
+latest_df = bulk_all_df[bulk_all_df["Date"] == latest_date].copy()
+
+break20_df = latest_df[latest_df["Break20"] == True].copy()
+
+break55_df = latest_df[latest_df["Break55"] == True].copy()
+
+st.write("🐢 20日ブレイク候補数：", len(break20_df))
+
+st.write("🐢 55日ブレイク候補数：", len(break55_df))
