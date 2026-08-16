@@ -349,4 +349,6 @@ bulk_response = requests.get(
 
 st.write("⚡ Bulk APIテスト：", bulk_response.status_code)
 
-st.write("⚡ Bulk API応答：", bulk_response.text)
+bulk_data = bulk_response.json()
+
+st.write("⚡ Bulkデータ項目：", bulk_data.keys())
