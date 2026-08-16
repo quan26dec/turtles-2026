@@ -148,6 +148,7 @@ if screen_codes:
     st.write(f"🐢 スクリーニング対象：{len(codes)}銘柄")
     
     turtle_candidates = []
+    print("DEBUG_SCREEN_LOOP_START", len(codes), flush=True)
     
     for code in codes:
         st.write("🐢 判定対象：", code)
