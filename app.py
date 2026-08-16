@@ -252,6 +252,7 @@ if screen_codes:
 
 st.divider()
 st.subheader("📡 自動銘柄一覧")
+print("DEBUG_MASTER_START", flush=True)
 
 master_url = "https://api.jquants.com/v2/equities/master"
 
