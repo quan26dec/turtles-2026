@@ -317,3 +317,10 @@ if master_response.status_code == 200:
             high_55_test = past_55_test["AdjH"].max()
 
             st.write(f"🐢 {test_code}：55日高値 {high_55_test:,.1f}円")
+
+            past_volume_test = test_df.iloc[:-1].tail(20)["AdjVo"].mean()
+            latest_volume_test = latest_test["AdjVo"]
+
+            volume_ratio_test = latest_volume_test / past_volume_test
+
+            st.write(f"🐢 {test_code}：出来高倍率 {volume_ratio_test:.2f}倍")
