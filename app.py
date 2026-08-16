@@ -338,6 +338,7 @@ if master_response.status_code == 200:
 
 st.divider()
 st.subheader("⚡ Bulk高速化テスト")
+print("DEBUG_START bulk section", flush=True)
 
 bulk_list_url = "https://api.jquants.com/v2/bulk/list"
 
