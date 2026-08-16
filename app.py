@@ -332,3 +332,6 @@ if master_response.status_code == 200:
             breakout_55_test = latest_test["AdjC"] > high_55_test
 
             st.write(f"🐢 {test_code}：55日ブレイク {breakout_55_test}")
+
+            if breakout_55_test and volume_ratio_test >= 1.5:
+                st.success(f"🐢🐢 {test_code}：自動巡回・強い候補")
