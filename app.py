@@ -293,10 +293,6 @@ if master_response.status_code == 200:
             headers={"x-api-key": JQUANTS_API_KEY},
             params={"code": test_code}
         )
-    
-        st.write(
-            f"🐢 {test_code}：日足API {test_response.status_code}"
-        )
         
         if test_response.status_code == 200:
             test_data = test_response.json().get("data", [])
@@ -310,44 +306,29 @@ if master_response.status_code == 200:
                 st.warning(f"⚠️ {test_code}：有効な日足データが56件未満のためスキップ")
                 continue
                 
-            st.write(f"🐢 {test_code}：取得日足 {len(test_df)}件")
-            st.write(f"🐢 {test_code}：列名", test_df.columns.tolist())
-
             test_df["Date"] = pd.to_datetime(test_df["Date"])
             test_df = test_df.sort_values("Date")
             latest_test = test_df.iloc[-1]
 
-            st.write(f"🐢 {test_code}：最新日 {latest_test['Date'].date()}")
-            st.write(f"🐢 {test_code}：最新終値 {latest_test['AdjC']:,.1f}円")
-
             past_20_test = test_df.iloc[:-1].tail(20)
             high_20_test = past_20_test["AdjH"].max()
-            st.write(f"🐢 {test_code}：20日高値 {high_20_test:,.1f}円")
-
+            
             past_55_test = test_df.iloc[:-1].tail(55)
             high_55_test = past_55_test["AdjH"].max()
-
-            st.write(f"🐢 {test_code}：55日高値 {high_55_test:,.1f}円")
 
             past_volume_test = test_df.iloc[:-1].tail(20)["AdjVo"].mean()
             latest_volume_test = latest_test["AdjVo"]
 
             volume_ratio_test = latest_volume_test / past_volume_test
 
-            st.write(f"🐢 {test_code}：出来高倍率 {volume_ratio_test:.2f}倍")
-
             breakout_20_test = latest_test["AdjC"] > high_20_test
 
-            st.write(f"🐢 {test_code}：20日ブレイク {breakout_20_test}")
             if breakout_20_test and volume_ratio_test >= 1.5:
                 auto_candidates_20.append(test_code)
             
             breakout_55_test = latest_test["AdjC"] > high_55_test
 
-            st.write(f"🐢 {test_code}：55日ブレイク {breakout_55_test}")
-
             if breakout_55_test and volume_ratio_test >= 1.5:
-                st.success(f"🐢🐢 {test_code}：自動巡回・強い候補")
                 auto_candidates.append(test_code)
 
             st.write("🐢 自動巡回候補数：", len(auto_candidates))
