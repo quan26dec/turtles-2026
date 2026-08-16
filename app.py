@@ -308,3 +308,7 @@ if master_response.status_code == 200:
 
             st.write(f"🐢 {test_code}：最新日 {latest_test['Date'].date()}")
             st.write(f"🐢 {test_code}：最新終値 {latest_test['AdjC']:,.1f}円")
+
+            past_20_test = test_df.iloc[:-1].tail(20)
+            high_20_test = past_20_test["AdjH"].max()
+            st.write(f"🐢 {test_code}：20日高値 {high_20_test:,.1f}円")
