@@ -324,3 +324,7 @@ if master_response.status_code == 200:
             volume_ratio_test = latest_volume_test / past_volume_test
 
             st.write(f"🐢 {test_code}：出来高倍率 {volume_ratio_test:.2f}倍")
+
+            breakout_20_test = latest_test["AdjC"] > high_20_test
+
+            st.write(f"🐢 {test_code}：20日ブレイク {breakout_20_test}")
