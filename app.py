@@ -476,5 +476,8 @@ st.write("🐢 20日ブレイク候補数：", len(break20_df))
 st.write("🐢 55日ブレイク候補数：", len(break55_df))
 
 break20_vol_df = break20_df[break20_df["VolRatio"] >= 1.5].copy()
+break55_vol_df = break55_df[break55_df["VolRatio"] >= 1.5].copy()
 
 st.write("🔥 20日ブレイク＋出来高1.5倍候補数：", len(break20_vol_df))
+st.write("🔥 55日ブレイク＋出来高1.5倍候補数：", len(break55_vol_df))
+
