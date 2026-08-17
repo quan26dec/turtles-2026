@@ -406,7 +406,7 @@ print("DEBUG_A live files =", len(live_bulk_files), "selected =", len(bulk_55_fi
 historical_bulk_files = [item for item in bulk_files if "/historical/" in item.get("Key", "")]
 st.write("📚 historicalファイル数:", len(historical_bulk_files))
 st.write("📚 historical末尾5ファイル:", historical_bulk_files[-5:])
-recent_historical_files = historical_bulk_files[-2:]
+recent_historical_files = historical_bulk_files[-3:]
 bulk_55_files = recent_historical_files + live_bulk_files
 
 st.write("⚡ Bulk55用ファイル数：", len(bulk_55_files))
