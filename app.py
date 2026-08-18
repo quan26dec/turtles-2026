@@ -267,6 +267,7 @@ if master_response.status_code == 200:
     master_df = pd.DataFrame(master_data)
     st.success(f"📡 自動取得した銘柄数：{len(master_df)}件")
     st.write("🔍 銘柄マスター列名：", master_df.columns.tolist())
+    name_map_df = master_df[["Code", "CoName"]].copy()
     
     auto_codes = master_df["Code"].astype(str).tolist()
     st.write("🐢 自動巡回用コード（先頭10件）:", auto_codes[:10])
@@ -512,8 +513,11 @@ early_break55_price_df = early_break55_price_df.reset_index(drop=True)
 early_break55_price_df.index = early_break55_price_df.index + 1
 early_break55_display_df["TurtleScore"] = early_break55_display_df["VolRatio"] / (1 + early_break55_display_df["Break55Pct"])
 early_break55_score_df = early_break55_display_df.sort_values("TurtleScore", ascending=False).copy()
+early_break55_score_df = early_break55_score_df.merge(name_map_df, on="Code", how="left")
+early_break55_score_df = early_break55_score_df.rename(columns={"CoName": "銘柄名"})
 early_break55_score_df = early_break55_score_df.reset_index(drop=True)
 early_break55_score_df.index = early_break55_score_df.index + 1
+early_break55_score_df = early_break55_score_df[["Code", "銘柄名", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio", "TurtleScore"]]
 
 early_break55_display_df = early_break55_display_df.rename(columns={
     "Code": "銘柄コード",
