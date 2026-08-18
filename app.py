@@ -497,3 +497,7 @@ break55_display_df = break55_display_df.rename(columns={
 
 st.subheader("🔥 55日ブレイク＋出来高1.5倍候補一覧")
 st.dataframe(break55_display_df, use_container_width=True)
+
+early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
+
+st.write("🌱 55日ブレイク初動候補数：", len(early_break55_df))
