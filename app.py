@@ -501,3 +501,18 @@ st.dataframe(break55_display_df, use_container_width=True)
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
 st.write("🌱 55日ブレイク初動候補数：", len(early_break55_df))
+
+early_break55_display_df = early_break55_df[["Code", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio"]].copy()
+
+early_break55_display_df = early_break55_display_df.rename(columns={
+    "Code": "銘柄コード",
+    "C": "終値",
+    "High55": "55日高値",
+    "Break55Pct": "55日高値上抜け率(%)",
+    "Vo": "最新出来高",
+    "Vol20": "20日平均出来高",
+    "VolRatio": "出来高倍率",
+})
+
+st.subheader("🌱 55日ブレイク初動候補一覧")
+st.dataframe(early_break55_display_df, use_container_width=True)
