@@ -459,6 +459,8 @@ bulk_all_df["Vol20"] = bulk_all_df.groupby("Code")["Vo"].transform(lambda x: x.s
 
 bulk_all_df["VolRatio"] = bulk_all_df["Vo"] / bulk_all_df["Vol20"]
 
+bulk_all_df["Break55Pct"] = (bulk_all_df["C"] / bulk_all_df["High55"] - 1) * 100
+
 bulk_all_df["Break20"] = bulk_all_df["C"] > bulk_all_df["High20"]
 
 bulk_all_df["Break55"] = bulk_all_df["C"] > bulk_all_df["High55"]
@@ -481,12 +483,13 @@ break55_vol_df = break55_df[break55_df["VolRatio"] >= 1.5].copy()
 st.write("🔥 20日ブレイク＋出来高1.5倍候補数：", len(break20_vol_df))
 st.write("🔥 55日ブレイク＋出来高1.5倍候補数：", len(break55_vol_df))
 
-break55_display_df = break55_vol_df[["Code", "C", "High55", "Vo", "Vol20", "VolRatio"]].copy()
+break55_display_df = break55_vol_df[["Code", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio"]].copy()
 break55_display_df = break55_display_df.sort_values("VolRatio", ascending=False)
 break55_display_df = break55_display_df.rename(columns={
     "Code": "銘柄コード",
     "C": "終値",
     "High55": "55日高値",
+    "Break55Pct": "55日高値上抜け率(%)",
     "Vo": "最新出来高",
     "Vol20": "20日平均出来高",
     "VolRatio": "出来高倍率",
