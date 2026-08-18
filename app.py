@@ -506,6 +506,9 @@ early_break55_display_df = early_break55_df[["Code", "C", "High55", "Break55Pct"
 early_break55_display_df = early_break55_display_df.sort_values("VolRatio", ascending=False)
 early_break55_display_df = early_break55_display_df.reset_index(drop=True)
 early_break55_display_df.index = early_break55_display_df.index + 1
+early_break55_price_df = early_break55_display_df.sort_values("Break55Pct", ascending=True).copy()
+early_break55_price_df = early_break55_price_df.reset_index(drop=True)
+early_break55_price_df.index = early_break55_price_df.index + 1
 
 early_break55_display_df = early_break55_display_df.rename(columns={
     "Code": "銘柄コード",
@@ -519,3 +522,5 @@ early_break55_display_df = early_break55_display_df.rename(columns={
 
 st.subheader("🌱 55日ブレイク初動候補一覧")
 st.dataframe(early_break55_display_df, use_container_width=True)
+st.subheader("🐢 55日ブレイク・価格初動ランキング")
+st.dataframe(early_break55_price_df, use_container_width=True)
