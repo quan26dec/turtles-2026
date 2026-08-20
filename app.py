@@ -516,7 +516,7 @@ early_break20_df = break20_vol_df[(break20_vol_df["Break20Pct"] >= 0) & (break20
 early_break20_df["AvgTradingValue20"] = early_break20_df["C"] * early_break20_df["Vol20"]
 early_break20_df = early_break20_df[early_break20_df["AvgTradingValue20"] >= 100_000_000].copy()
 early_break20_df["ToHigh55Pct"] = (early_break20_df["High55"] / early_break20_df["C"] - 1) * 100
-evolution55_df = early_break20_df[(early_break20_df["ToHigh55Pct"] > 0) & (early_break20_df["ToHigh55Pct"] <= 3)].copy()
+evolution55_df = early_break20_df[(early_break20_df["ToHigh55Pct"] > 0) & (early_break20_df["ToHigh55Pct"] <= 5)].copy()
 evolution55_df = evolution55_df.sort_values("ToHigh55Pct", ascending=True)
 evolution55_df = evolution55_df.reset_index(drop=True)
 evolution55_df.index = evolution55_df.index + 1
