@@ -598,7 +598,15 @@ st.subheader("🏆 TurtleScoreランキング")
 st.dataframe(early_break55_score_df, use_container_width=True)
 common_codes = set(early_break20_score_df["銘柄コード"]) & set(early_break55_score_df["銘柄コード"])
 common_df = early_break55_score_df[early_break55_score_df["銘柄コード"].isin(common_codes)].copy()
+common20_info = early_break20_score_df[["銘柄コード", "20日高値上抜け率(%)", "TurtleScore"]].copy()
+common20_info = common20_info.rename(columns={"TurtleScore": "20日TurtleScore"})
+common_df = common_df.merge(common20_info, on="銘柄コード", how="left")
+common_df = common_df.rename(columns={"TurtleScore": "55日TurtleScore"})
+common_df["総合TurtleScore"] = (common_df["20日TurtleScore"] + common_df["55日TurtleScore"]) / 2
+common_df = common_df.sort_values("総合TurtleScore", ascending=False)
 common_df = common_df.reset_index(drop=True)
 common_df.index = common_df.index + 1
+common_df = common_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
+
 st.subheader("🐢 20日＋55日 共通モメンタム候補")
 st.dataframe(common_df, use_container_width=True)
