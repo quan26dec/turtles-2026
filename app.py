@@ -529,6 +529,12 @@ evolution55_df.index = evolution55_df.index + 1
 evolution55_display_df = evolution55_df[["Code", "CoName", "C", "Break20Pct", "ToHigh55Pct", "VolRatio", "AvgTradingValue20"]].copy()
 evolution55_display_df = evolution55_display_df.rename(columns={"Code": "銘柄コード", "CoName": "銘柄名", "C": "終値", "Break20Pct": "20日高値上抜け率(%)", "ToHigh55Pct": "55日高値まであと(%)", "VolRatio": "出来高倍率", "AvgTradingValue20": "20日平均売買代金"})
 evolution55_display_df = evolution55_display_df.round(2)
+evolution55_display_df["予兆Score"] = evolution55_display_df["出来高倍率"] / (1 + evolution55_display_df["55日高値まであと(%)"])
+evolution55_display_df = evolution55_display_df.sort_values("予兆Score", ascending=False)
+evolution55_display_df = evolution55_display_df.reset_index(drop=True)
+evolution55_display_df.index = evolution55_display_df.index + 1
+evolution55_display_df["予兆Score"] = evolution55_display_df["予兆Score"].round(2)
+
 st.subheader("🚀 20日突破 → 55日ブレイク直前候補")
 st.write("🎯 55日ブレイク直前候補数：", len(evolution55_display_df))
 st.dataframe(evolution55_display_df, use_container_width=True)
