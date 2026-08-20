@@ -520,6 +520,7 @@ early_break55_score_df = early_break55_score_df.rename(columns={"CoName": "銘�
 early_break55_score_df = early_break55_score_df.reset_index(drop=True)
 early_break55_score_df.index = early_break55_score_df.index + 1
 early_break55_score_df = early_break55_score_df[["Code", "銘柄名", "C", "High55", "Break55Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio", "TurtleScore"]]
+early_break55_score_df["AvgTradingValue20"] = early_break55_score_df["AvgTradingValue20"] / 100_000_000
 early_break55_score_df = early_break55_score_df.rename(columns={
     "Code": "銘柄コード",
     "C": "終値",
@@ -527,7 +528,7 @@ early_break55_score_df = early_break55_score_df.rename(columns={
     "Break55Pct": "55日高値上抜け率(%)",
     "Vo": "最新出来高",
     "Vol20": "20日平均出来高",
-    "AvgTradingValue20": "20日平均売買代金",
+    "AvgTradingValue20": "20日平均売買代金(億円)",
     "VolRatio": "出来高倍率",
 })
 
