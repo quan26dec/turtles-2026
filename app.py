@@ -267,83 +267,11 @@ if master_response.status_code == 200:
     master_df = pd.DataFrame(master_data)
     st.success(f"📡 自動取得した銘柄数：{len(master_df)}件")
     st.write("🔍 銘柄マスター列名：", master_df.columns.tolist())
-    name_map_df = master_df[["Code", "CoName"]].copy()
-    st.write("📦 商品区分一覧：", master_df["ProdCat"].dropna().unique().tolist())
-    st.write("🔍 商品区分サンプル：", master_df[["ProdCat", "Code", "CoName"]].groupby("ProdCat").head(3))
-        
+    name_map_df = master_df[["Code", "CoName"]].copy()   
+     
     auto_codes = master_df.loc[master_df["ProdCat"] == "011", "Code"].astype(str).tolist()
-    st.write("🐢 自動巡回用コード（先頭10件）:", auto_codes[:10])
 
     auto_codes_4digit = [code[:4] for code in auto_codes]
-    st.write("🐢 4桁変換（先頭10件）:", auto_codes_4digit[:10])
-
-    test_code = auto_codes[0]
-    
-    test_url = "https://api.jquants.com/v2/equities/bars/daily"
-    test_response = requests.get(
-        test_url,
-        headers={"x-api-key": JQUANTS_API_KEY},
-        params={"code": test_code}
-    )
-    
-    st.write("🐢 5桁コードテスト :", test_code)
-    st.write("🐢 日足APIテスト :", test_response.status_code)
-
-    st.write("🐢 5銘柄自動巡回テスト")
-    print("DEBUG_TURTLE_START", flush=True)
-    
-    test_codes = auto_codes[:5]
-    auto_candidates = []
-    auto_candidates_20 = []
-    
-    for test_code in test_codes:
-        test_response = requests.get(
-            test_url,
-            headers={"x-api-key": JQUANTS_API_KEY},
-            params={"code": test_code}
-        )
-        
-        if test_response.status_code == 200:
-            test_data = test_response.json().get("data", [])
-            test_df = pd.DataFrame(test_data)
-            test_df["AdjC"] = pd.to_numeric(test_df["AdjC"], errors="coerce")
-            test_df["AdjH"] = pd.to_numeric(test_df["AdjH"], errors="coerce")
-            test_df["AdjVo"] = pd.to_numeric(test_df["AdjVo"], errors="coerce")
-            test_df = test_df.dropna(subset=["AdjC", "AdjH", "AdjVo"])
-
-            if len(test_df) < 56:
-                st.warning(f"⚠️ {test_code}：有効な日足データが56件未満のためスキップ")
-                continue
-                
-            test_df["Date"] = pd.to_datetime(test_df["Date"])
-            test_df = test_df.sort_values("Date")
-            latest_test = test_df.iloc[-1]
-
-            past_20_test = test_df.iloc[:-1].tail(20)
-            high_20_test = past_20_test["AdjH"].max()
-            
-            past_55_test = test_df.iloc[:-1].tail(55)
-            high_55_test = past_55_test["AdjH"].max()
-
-            past_volume_test = test_df.iloc[:-1].tail(20)["AdjVo"].mean()
-            latest_volume_test = latest_test["AdjVo"]
-
-            volume_ratio_test = latest_volume_test / past_volume_test
-
-            breakout_20_test = latest_test["AdjC"] > high_20_test
-
-            if breakout_20_test and volume_ratio_test >= 1.5:
-                auto_candidates_20.append(test_code)
-            
-            breakout_55_test = latest_test["AdjC"] > high_55_test
-
-            if breakout_55_test and volume_ratio_test >= 1.5:
-                auto_candidates.append(test_code)
-
-            st.write("🐢 自動巡回候補数：", len(auto_candidates))
-            st.write("🐢 自動巡回候補：", auto_candidates)
-            st.write("🐢 20日候補数：", len(auto_candidates_20))
-            st.write("🐢 20日候補：", auto_candidates_20)
 
 st.divider()
 st.subheader("⚡ Bulk高速化テスト")
@@ -357,20 +285,11 @@ bulk_response = requests.get(
     params={"endpoint": "/equities/bars/daily"}
 )
 
-st.write("⚡ Bulk APIテスト：", bulk_response.status_code)
-
 bulk_data = bulk_response.json()
 
-st.write("⚡ Bulkデータ項目：", bulk_data.keys())
-
 bulk_files = bulk_data.get("data", [])
-st.write("⚡ Bulkファイル件数：", len(bulk_files))
-
-st.write("⚡ Bulk最終ファイル：", bulk_files[-1])
 
 latest_bulk_key = bulk_files[-1]["Key"]
-
-st.write("⚡ 最新Bulkキー：", latest_bulk_key)
 
 bulk_get_url = "https://api.jquants.com/v2/bulk/get"
 
@@ -380,40 +299,21 @@ bulk_get_response = requests.get(
     params={"key": latest_bulk_key}
 )
 
-st.write("⚡ Bulk取得テスト：", bulk_get_response.status_code)
-
 bulk_get_data = bulk_get_response.json()
-st.write("⚡ Bulk取得項目：", bulk_get_data.keys())
 
 bulk_download_url = bulk_get_data["url"]
 
 bulk_file_response = requests.get(bulk_download_url)
 
-st.write("⚡ Bulkファイル取得：", bulk_file_response.status_code)
-
 import io
 
 bulk_df = pd.read_csv(io.BytesIO(bulk_file_response.content), compression="gzip")
-
-st.write("⚡ Bulk読込行数：", len(bulk_df))
-
-st.write("⚡ Bulk列名：", bulk_df.columns.tolist())
-
-st.write("⚡ Bulk先頭データ：", bulk_df.iloc[0].to_dict())
-
-st.write("⚡ Bulk末尾5ファイル：", bulk_files[-5:])
-
 live_bulk_files = [item for item in bulk_files if "/live/" in item.get("Key", "")]
 bulk_55_files = live_bulk_files[-10:]
-st.write("🔍 liveファイル数:", len(live_bulk_files))
-print("DEBUG_A live files =", len(live_bulk_files), "selected =", len(bulk_55_files), flush=True)
+
 historical_bulk_files = [item for item in bulk_files if "/historical/" in item.get("Key", "")]
-st.write("📚 historicalファイル数:", len(historical_bulk_files))
-st.write("📚 historical末尾5ファイル:", historical_bulk_files[-5:])
 recent_historical_files = historical_bulk_files[-3:]
 bulk_55_files = recent_historical_files + live_bulk_files
-
-st.write("⚡ Bulk55用ファイル数：", len(bulk_55_files))
 
 bulk_dfs = []
 
@@ -441,8 +341,6 @@ for bulk_item in bulk_55_files:
 
 bulk_all_df = pd.concat(bulk_dfs, ignore_index=True)
 bulk_all_df = bulk_all_df[bulk_all_df["Code"].astype(str).isin(set(auto_codes))].copy()
-
-st.write("⚡ Bulk結合後行数：", len(bulk_all_df))
 
 bulk_all_df["Date"] = pd.to_datetime(bulk_all_df["Date"])
 
@@ -479,15 +377,9 @@ break20_df = latest_df[latest_df["Break20"] == True].copy()
 
 break55_df = latest_df[latest_df["Break55"] == True].copy()
 
-st.write("🐢 20日ブレイク候補数：", len(break20_df))
-
-st.write("🐢 55日ブレイク候補数：", len(break55_df))
-
 break20_vol_df = break20_df[break20_df["VolRatio"] >= 1.5].copy()
 break55_vol_df = break55_df[break55_df["VolRatio"] >= 1.5].copy()
 
-st.write("🔥 20日ブレイク＋出来高1.5倍候補数：", len(break20_vol_df))
-st.write("🔥 55日ブレイク＋出来高1.5倍候補数：", len(break55_vol_df))
 break20_display_df = break20_vol_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "VolRatio"]].copy()
 break20_display_df = break20_display_df.sort_values("VolRatio", ascending=False)
 break20_display_df = break20_display_df.reset_index(drop=True)
@@ -513,8 +405,6 @@ break55_display_df = break55_display_df.rename(columns={
     "VolRatio": "出来高倍率",
 })
 
-st.subheader("🔥 55日ブレイク＋出来高1.5倍候補一覧")
-st.dataframe(break55_display_df, use_container_width=True)
 early_break20_df = break20_vol_df[(break20_vol_df["Break20Pct"] >= 0) & (break20_vol_df["Break20Pct"] <= 3)].copy()
 early_break20_df["AvgTradingValue20"] = early_break20_df["C"] * early_break20_df["Vol20"]
 early_break20_df = early_break20_df[early_break20_df["AvgTradingValue20"] >= 100_000_000].copy()
@@ -535,9 +425,6 @@ evolution55_display_df = evolution55_display_df.reset_index(drop=True)
 evolution55_display_df.index = evolution55_display_df.index + 1
 evolution55_display_df["予兆Score"] = evolution55_display_df["予兆Score"].round(2)
 
-st.subheader("🚀 20日突破 → 55日ブレイク直前候補")
-st.write("🎯 55日ブレイク直前候補数：", len(evolution55_display_df))
-st.dataframe(evolution55_display_df, use_container_width=True)
 st.write("🔥 20日ブレイク初動＋売買代金1億円以上候補数：", len(early_break20_df))
 early_break20_display_df = early_break20_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]].copy()
 early_break20_display_df = early_break20_display_df.sort_values("VolRatio", ascending=False)
@@ -562,10 +449,6 @@ early_break20_display_df["TurtleScore"] = early_break20_display_df["出来高倍
 early_break20_score_df = early_break20_display_df.sort_values("TurtleScore", ascending=False).copy()
 early_break20_score_df = early_break20_score_df.reset_index(drop=True)
 early_break20_score_df.index = early_break20_score_df.index + 1
-st.subheader("🔥 20日ブレイク初動候補一覧")
-st.dataframe(early_break20_display_df, use_container_width=True)
-st.subheader("🏆 20日TurtleScoreランキング")
-st.dataframe(early_break20_score_df, use_container_width=True)
 
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
@@ -610,15 +493,6 @@ early_break55_display_df = early_break55_display_df.rename(columns={
     "VolRatio": "出来高倍率",
 })
 
-st.subheader("🔥 20日ブレイク＋出来高1.5倍候補一覧")
-st.dataframe(break20_display_df, use_container_width=True)
-
-st.subheader("🌱 55日ブレイク初動候補一覧")
-st.dataframe(early_break55_display_df, use_container_width=True)
-st.subheader("🐢 55日ブレイク・価格初動ランキング")
-st.dataframe(early_break55_price_df, use_container_width=True)
-st.subheader("🏆 TurtleScoreランキング")
-st.dataframe(early_break55_score_df, use_container_width=True)
 common_codes = set(early_break20_score_df["銘柄コード"]) & set(early_break55_score_df["銘柄コード"])
 common_df = early_break55_score_df[early_break55_score_df["銘柄コード"].isin(common_codes)].copy()
 common20_info = early_break20_score_df[["銘柄コード", "20日高値上抜け率(%)", "TurtleScore"]].copy()
@@ -634,12 +508,9 @@ evolution_df = evolution_df.reset_index(drop=True)
 evolution_df.index = evolution_df.index + 1
 common_df = common_df.reset_index(drop=True)
 common_df.index = common_df.index + 1
-st.subheader("🚀 20日→55日 進化候補ランキング")
-st.write("🚀 進化候補数：", len(evolution_df))
 evolution_df = evolution_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
 evolution_df = evolution_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "進化差", "出来高倍率", "20日Score", "55日Score", "総合TurtleScore"]]
 evolution_df = evolution_df.round(2)
-st.dataframe(evolution_df, use_container_width=True)
 common_df = common_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
 common_df = common_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "出来高倍率", "20日平均売買代金(億円)", "20日Score", "55日Score", "進化差","総合TurtleScore"]]
 
