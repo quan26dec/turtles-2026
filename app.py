@@ -605,8 +605,18 @@ common_df = common_df.rename(columns={"TurtleScore": "55日TurtleScore"})
 common_df["総合TurtleScore"] = (common_df["20日TurtleScore"] + common_df["55日TurtleScore"]) / 2
 common_df["進化差"] = common_df["20日高値上抜け率(%)"] - common_df["55日高値上抜け率(%)"]
 common_df = common_df.sort_values("総合TurtleScore", ascending=False)
+evolution_df = common_df[common_df["進化差"] > 0].copy()
+evolution_df = evolution_df.sort_values("進化差", ascending=False)
+evolution_df = evolution_df.reset_index(drop=True)
+evolution_df.index = evolution_df.index + 1
 common_df = common_df.reset_index(drop=True)
 common_df.index = common_df.index + 1
+st.subheader("🚀 20日→55日 進化候補ランキング")
+st.write("🚀 進化候補数：", len(evolution_df))
+evolution_df = evolution_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
+evolution_df = evolution_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "進化差", "出来高倍率", "20日Score", "55日Score", "総合TurtleScore"]]
+evolution_df = evolution_df.round(2)
+st.dataframe(evolution_df, use_container_width=True)
 common_df = common_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
 common_df = common_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "出来高倍率", "20日平均売買代金(億円)", "20日Score", "55日Score", "進化差","総合TurtleScore"]]
 
