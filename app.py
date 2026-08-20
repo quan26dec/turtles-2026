@@ -507,6 +507,7 @@ st.write("🌱 55日ブレイク初動候補数：", len(early_break55_df))
 early_break55_display_df = early_break55_df[["Code", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio"]].copy()
 early_break55_display_df["AvgTradingValue20"] = early_break55_display_df["C"] * early_break55_display_df["Vol20"]
 early_break55_display_df = early_break55_display_df[early_break55_display_df["AvgTradingValue20"] >= 100_000_000].copy()
+st.write("💰 売買代金1億円以上の初動候補数：", len(early_break55_display_df))
 early_break55_display_df = early_break55_display_df.sort_values("VolRatio", ascending=False)
 early_break55_display_df = early_break55_display_df.reset_index(drop=True)
 early_break55_display_df.index = early_break55_display_df.index + 1
