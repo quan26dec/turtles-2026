@@ -268,6 +268,7 @@ if master_response.status_code == 200:
     st.success(f"📡 自動取得した銘柄数：{len(master_df)}件")
     st.write("🔍 銘柄マスター列名：", master_df.columns.tolist())
     name_map_df = master_df[["Code", "CoName"]].copy()
+    st.write("📦 商品区分一覧：", master_df["ProdCat"].dropna().unique().tolist())
     
     auto_codes = master_df["Code"].astype(str).tolist()
     st.write("🐢 自動巡回用コード（先頭10件）:", auto_codes[:10])
