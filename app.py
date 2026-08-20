@@ -518,6 +518,15 @@ early_break55_score_df = early_break55_score_df.rename(columns={"CoName": "銘�
 early_break55_score_df = early_break55_score_df.reset_index(drop=True)
 early_break55_score_df.index = early_break55_score_df.index + 1
 early_break55_score_df = early_break55_score_df[["Code", "銘柄名", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio", "TurtleScore"]]
+early_break55_score_df = early_break55_score_df.rename(columns={
+    "Code": "銘柄コード",
+    "C": "終値",
+    "High55": "55日高値",
+    "Break55Pct": "55日高値上抜け率(%)",
+    "Vo": "最新出来高",
+    "Vol20": "20日平均出来高",
+    "VolRatio": "出来高倍率",
+})
 
 early_break55_display_df = early_break55_display_df.rename(columns={
     "Code": "銘柄コード",
