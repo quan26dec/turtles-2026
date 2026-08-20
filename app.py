@@ -515,6 +515,20 @@ st.dataframe(break55_display_df, use_container_width=True)
 early_break20_df = break20_vol_df[(break20_vol_df["Break20Pct"] >= 0) & (break20_vol_df["Break20Pct"] <= 3)].copy()
 early_break20_df["AvgTradingValue20"] = early_break20_df["C"] * early_break20_df["Vol20"]
 early_break20_df = early_break20_df[early_break20_df["AvgTradingValue20"] >= 100_000_000].copy()
+early_break20_df["ToHigh55Pct"] = (early_break20_df["High55"] / early_break20_df["C"] - 1) * 100
+evolution55_df = early_break20_df[(early_break20_df["ToHigh55Pct"] > 0) & (early_break20_df["ToHigh55Pct"] <= 3)].copy()
+evolution55_df = evolution55_df.sort_values("ToHigh55Pct", ascending=True)
+evolution55_df = evolution55_df.reset_index(drop=True)
+evolution55_df.index = evolution55_df.index + 1
+evolution55_df = evolution55_df.merge(name_map_df, on="Code", how="left")
+evolution55_df = evolution55_df.reset_index(drop=True)
+evolution55_df.index = evolution55_df.index + 1
+evolution55_display_df = evolution55_df[["Code", "CoName", "C", "Break20Pct", "ToHigh55Pct", "VolRatio", "AvgTradingValue20"]].copy()
+evolution55_display_df = evolution55_display_df.rename(columns={"Code": "銘柄コード", "CoName": "銘柄名", "C": "終値", "Break20Pct": "20日高値上抜け率(%)", "ToHigh55Pct": "55日高値まであと(%)", "VolRatio": "出来高倍率", "AvgTradingValue20": "20日平均売買代金"})
+evolution55_display_df = evolution55_display_df.round(2)
+st.subheader("🚀 20日突破 → 55日ブレイク直前候補")
+st.write("🎯 55日ブレイク直前候補数：", len(evolution55_display_df))
+st.dataframe(evolution55_display_df, use_container_width=True)
 st.write("🔥 20日ブレイク初動＋売買代金1億円以上候補数：", len(early_break20_df))
 early_break20_display_df = early_break20_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]].copy()
 early_break20_display_df = early_break20_display_df.sort_values("VolRatio", ascending=False)
