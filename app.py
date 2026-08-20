@@ -516,6 +516,26 @@ early_break20_df = break20_vol_df[(break20_vol_df["Break20Pct"] >= 0) & (break20
 early_break20_df["AvgTradingValue20"] = early_break20_df["C"] * early_break20_df["Vol20"]
 early_break20_df = early_break20_df[early_break20_df["AvgTradingValue20"] >= 100_000_000].copy()
 st.write("🔥 20日ブレイク初動＋売買代金1億円以上候補数：", len(early_break20_df))
+early_break20_display_df = early_break20_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]].copy()
+early_break20_display_df = early_break20_display_df.sort_values("VolRatio", ascending=False)
+early_break20_display_df = early_break20_display_df.reset_index(drop=True)
+early_break20_display_df.index = early_break20_display_df.index + 1
+early_break20_display_df = early_break20_display_df.merge(name_map_df, on="Code", how="left")
+early_break20_display_df = early_break20_display_df.rename(columns={"CoName": "銘柄名"})
+early_break20_display_df = early_break20_display_df[["Code", "銘柄名", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]]
+early_break20_display_df["AvgTradingValue20"] = early_break20_display_df["AvgTradingValue20"] / 100_000_000
+early_break20_display_df = early_break20_display_df.rename(columns={"AvgTradingValue20": "20日平均売買代金(億円)"})
+early_break20_display_df = early_break20_display_df.rename(columns={
+        "Code": "銘柄コード",
+        "C": "終値",
+        "High20": "20日高値",
+        "Break20Pct": "20日高値上抜け率(%)",
+        "Vo": "最新出来高",
+        "Vol20": "20日平均出来高",
+        "VolRatio": "出来高倍率",
+})
+st.subheader("🔥 20日ブレイク初動候補一覧")
+st.dataframe(early_break20_display_df, use_container_width=True)
 
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
