@@ -521,6 +521,7 @@ early_break20_display_df = early_break20_display_df.sort_values("VolRatio", asce
 early_break20_display_df = early_break20_display_df.reset_index(drop=True)
 early_break20_display_df.index = early_break20_display_df.index + 1
 early_break20_display_df = early_break20_display_df.merge(name_map_df, on="Code", how="left")
+early_break20_display_df.index = early_break20_display_df.index + 1
 early_break20_display_df = early_break20_display_df.rename(columns={"CoName": "銘柄名"})
 early_break20_display_df = early_break20_display_df[["Code", "銘柄名", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]]
 early_break20_display_df["AvgTradingValue20"] = early_break20_display_df["AvgTradingValue20"] / 100_000_000
