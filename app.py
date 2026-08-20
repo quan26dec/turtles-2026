@@ -512,6 +512,10 @@ break55_display_df = break55_display_df.rename(columns={
 
 st.subheader("🔥 55日ブレイク＋出来高1.5倍候補一覧")
 st.dataframe(break55_display_df, use_container_width=True)
+early_break20_df = break20_vol_df[(break20_vol_df["Break20Pct"] >= 0) & (break20_vol_df["Break20Pct"] <= 3)].copy()
+early_break20_df["AvgTradingValue20"] = early_break20_df["C"] * early_break20_df["Vol20"]
+early_break20_df = early_break20_df[early_break20_df["AvgTradingValue20"] >= 100_000_000].copy()
+st.write("🔥 20日ブレイク初動＋売買代金1億円以上候補数：", len(early_break20_df))
 
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
