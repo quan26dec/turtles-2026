@@ -484,7 +484,19 @@ break55_vol_df = break55_df[break55_df["VolRatio"] >= 1.5].copy()
 
 st.write("🔥 20日ブレイク＋出来高1.5倍候補数：", len(break20_vol_df))
 st.write("🔥 55日ブレイク＋出来高1.5倍候補数：", len(break55_vol_df))
-
+break20_display_df = break20_vol_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "VolRatio"]].copy()
+break20_display_df = break20_display_df.sort_values("VolRatio", ascending=False)
+break20_display_df = break20_display_df.reset_index(drop=True)
+break20_display_df.index = break20_display_df.index + 1
+break20_display_df = break20_display_df.rename(columns={
+    "Code": "銘柄コード",
+    "C": "終値",
+    "High20": "20日高値",
+    "Break20Pct": "20日高値上抜け率(%)",
+    "Vo": "最新出来高",
+    "Vol20": "20日平均出来高",
+    "VolRatio": "出来高倍率",
+})
 break55_display_df = break55_vol_df[["Code", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio"]].copy()
 break55_display_df = break55_display_df.sort_values("VolRatio", ascending=False)
 break55_display_df = break55_display_df.rename(columns={
@@ -542,6 +554,9 @@ early_break55_display_df = early_break55_display_df.rename(columns={
     "Vol20": "20日平均出来高",
     "VolRatio": "出来高倍率",
 })
+
+st.subheader("🔥 20日ブレイク＋出来高1.5倍候補一覧")
+st.dataframe(break20_display_df, use_container_width=True)
 
 st.subheader("🌱 55日ブレイク初動候補一覧")
 st.dataframe(early_break55_display_df, use_container_width=True)
