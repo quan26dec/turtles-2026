@@ -610,4 +610,6 @@ common_df = common_df.rename(columns={"55日TurtleScore": "55日Score", "20日Tu
 common_df = common_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "出来高倍率", "20日平均売買代金(億円)", "20日Score", "55日Score", "総合TurtleScore"]]
 
 st.subheader("🐢 20日＋55日 共通モメンタム候補")
+common_df = common_df.round({"20日高値上抜け率(%)": 2, "55日高値上抜け率(%)": 2, "出来高倍率": 2, "20日平均売買代金(億円)": 2, "20日Score": 2, "55日Score": 2, "総合TurtleScore": 2})
+st.write("🎯 共通モメンタム候補数：", len(common_df))
 st.dataframe(common_df, use_container_width=True)
