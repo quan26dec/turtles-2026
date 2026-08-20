@@ -535,8 +535,14 @@ early_break20_display_df = early_break20_display_df.rename(columns={
         "Vol20": "20日平均出来高",
         "VolRatio": "出来高倍率",
 })
+early_break20_display_df["TurtleScore"] = early_break20_display_df["出来高倍率"] / (1 + early_break20_display_df["20日高値上抜け率(%)"])
+early_break20_score_df = early_break20_display_df.sort_values("TurtleScore", ascending=False).copy()
+early_break20_score_df = early_break20_score_df.reset_index(drop=True)
+early_break20_score_df.index = early_break20_score_df.index + 1
 st.subheader("🔥 20日ブレイク初動候補一覧")
 st.dataframe(early_break20_display_df, use_container_width=True)
+st.subheader("🏆 20日TurtleScoreランキング")
+st.dataframe(early_break20_score_df, use_container_width=True)
 
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
