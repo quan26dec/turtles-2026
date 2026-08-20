@@ -462,6 +462,7 @@ bulk_all_df["Vol20"] = bulk_all_df.groupby("Code")["Vo"].transform(lambda x: x.s
 bulk_all_df["VolRatio"] = bulk_all_df["Vo"] / bulk_all_df["Vol20"]
 
 bulk_all_df["Break55Pct"] = (bulk_all_df["C"] / bulk_all_df["High55"] - 1) * 100
+bulk_all_df["Break20Pct"] = (bulk_all_df["C"] / bulk_all_df["High20"] - 1) * 100
 
 bulk_all_df["Break20"] = bulk_all_df["C"] > bulk_all_df["High20"]
 
