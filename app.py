@@ -440,6 +440,7 @@ for bulk_item in bulk_55_files:
     bulk_dfs.append(item_df)
 
 bulk_all_df = pd.concat(bulk_dfs, ignore_index=True)
+bulk_all_df = bulk_all_df[bulk_all_df["Code"].astype(str).isin(set(auto_codes))].copy()
 
 st.write("⚡ Bulk結合後行数：", len(bulk_all_df))
 
