@@ -270,8 +270,8 @@ if master_response.status_code == 200:
     name_map_df = master_df[["Code", "CoName"]].copy()
     st.write("📦 商品区分一覧：", master_df["ProdCat"].dropna().unique().tolist())
     st.write("🔍 商品区分サンプル：", master_df[["ProdCat", "Code", "CoName"]].groupby("ProdCat").head(3))
-    
-    auto_codes = master_df["Code"].astype(str).tolist()
+        
+    auto_codes = master_df.loc[master_df["ProdCat"] == "011", "Code"].astype(str).tolist()
     st.write("🐢 自動巡回用コード（先頭10件）:", auto_codes[:10])
 
     auto_codes_4digit = [code[:4] for code in auto_codes]
