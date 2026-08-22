@@ -254,19 +254,14 @@ if screen_codes:
         st.info("👀 今回はタートルズ候補なし")
 
 st.divider()
-st.subheader("📡 自動銘柄一覧")
-print("DEBUG_MASTER_START", flush=True)
 
 master_url = "https://api.jquants.com/v2/equities/master"
 
 master_response = requests.get(master_url, headers={"x-api-key": JQUANTS_API_KEY})
-st.write("📡 銘柄一覧API:", master_response.status_code)
 
 if master_response.status_code == 200:
     master_data = master_response.json().get("data", [])
     master_df = pd.DataFrame(master_data)
-    st.success(f"📡 自動取得した銘柄数：{len(master_df)}件")
-    st.write("🔍 銘柄マスター列名：", master_df.columns.tolist())
     name_map_df = master_df[["Code", "CoName"]].copy()   
      
     auto_codes = master_df.loc[master_df["ProdCat"] == "011", "Code"].astype(str).tolist()
@@ -274,8 +269,6 @@ if master_response.status_code == 200:
     auto_codes_4digit = [code[:4] for code in auto_codes]
 
 st.divider()
-st.subheader("⚡ Bulk高速化テスト")
-print("DEBUG_START bulk section", flush=True)
 
 bulk_list_url = "https://api.jquants.com/v2/bulk/list"
 
@@ -425,7 +418,6 @@ evolution55_display_df = evolution55_display_df.reset_index(drop=True)
 evolution55_display_df.index = evolution55_display_df.index + 1
 evolution55_display_df["予兆Score"] = evolution55_display_df["予兆Score"].round(2)
 
-st.write("🔥 20日ブレイク初動＋売買代金1億円以上候補数：", len(early_break20_df))
 early_break20_display_df = early_break20_df[["Code", "C", "High20", "Break20Pct", "Vo", "Vol20", "AvgTradingValue20", "VolRatio"]].copy()
 early_break20_display_df = early_break20_display_df.sort_values("VolRatio", ascending=False)
 early_break20_display_df = early_break20_display_df.reset_index(drop=True)
@@ -452,12 +444,9 @@ early_break20_score_df.index = early_break20_score_df.index + 1
 
 early_break55_df = break55_vol_df[(break55_vol_df["Break55Pct"] >= 0) & (break55_vol_df["Break55Pct"] <= 3)].copy()
 
-st.write("🌱 55日ブレイク初動候補数：", len(early_break55_df))
-
 early_break55_display_df = early_break55_df[["Code", "C", "High55", "Break55Pct", "Vo", "Vol20", "VolRatio"]].copy()
 early_break55_display_df["AvgTradingValue20"] = early_break55_display_df["C"] * early_break55_display_df["Vol20"]
 early_break55_display_df = early_break55_display_df[early_break55_display_df["AvgTradingValue20"] >= 100_000_000].copy()
-st.write("💰 売買代金1億円以上の初動候補数：", len(early_break55_display_df))
 early_break55_display_df = early_break55_display_df.sort_values("VolRatio", ascending=False)
 early_break55_display_df = early_break55_display_df.reset_index(drop=True)
 early_break55_display_df.index = early_break55_display_df.index + 1
@@ -514,10 +503,7 @@ evolution_df = evolution_df.round(2)
 common_df = common_df.rename(columns={"55日TurtleScore": "55日Score", "20日TurtleScore": "20日Score"})
 common_df = common_df[["銘柄コード", "銘柄名", "終値", "20日高値上抜け率(%)", "55日高値上抜け率(%)", "出来高倍率", "20日平均売買代金(億円)", "20日Score", "55日Score", "進化差","総合TurtleScore"]]
 
-st.subheader("🐢 20日＋55日 共通モメンタム候補")
 common_df = common_df.round({"20日高値上抜け率(%)": 2, "55日高値上抜け率(%)": 2, "出来高倍率": 2, "20日平均売買代金(億円)": 2, "20日Score": 2, "55日Score": 2, "進化差": 2, "総合TurtleScore": 2})
-st.write("🎯 共通モメンタム候補数：", len(common_df))
-st.dataframe(common_df, use_container_width=True)
 
 st.header("🐢 Turtle メインスクリーナー")
 st.subheader("🚀 20日突破 → 55日ブレイク直前候補")
