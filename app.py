@@ -1,6 +1,9 @@
+import time
 import streamlit as st
 import requests
 import pandas as pd
+
+start_time = time.time()
 
 JQUANTS_API_KEY = st.secrets["JQUANTS_API_KEY"]
 
@@ -516,3 +519,6 @@ st.dataframe(early_break55_score_df, use_container_width=True)
 st.subheader("🐢 20日＋55日 共通モメンタム候補")
 st.write("🎯 共通モメンタム候補数：", len(common_df))
 st.dataframe(common_df, use_container_width=True)
+
+elapsed_time = time.time() - start_time
+st.caption(f"⏱️ 実行時間：{elapsed_time:.1f}秒")
